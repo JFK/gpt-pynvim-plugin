@@ -21,5 +21,6 @@ jobs:
 
       - name: Check links
         run: |
-          linkchecker --ignore-url=^mailto: --ignore-url=^tel: --recursive --check-extern --no-warnings --no-status .
+          linkchecker --ignore-url=^mailto: --ignore-url=^tel: -r 5 --check-extern --no-warnings --no-status .
+
 
