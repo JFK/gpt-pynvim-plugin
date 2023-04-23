@@ -10,3 +10,6 @@ build: clean
 
 upload: build
 	twine upload dist/*
+
+autopep8: autopep8
+	autopep8 --in-place --aggressive --aggressive gpt-pynvim/python/gpt_pynvim.py
