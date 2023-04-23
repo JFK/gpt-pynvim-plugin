@@ -1,0 +1,25 @@
+name: Link Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linkcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y linkchecker
+
+      - name: Check links
+        run: |
+          linkchecker --ignore-url=^mailto: --ignore-url=^tel: --recursive --check-extern --no-warnings --no-status .
+

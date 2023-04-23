@@ -34,5 +34,5 @@ endfunction
 " GPTCommentGenerator Plugin
 vnoremap <buffer> , :<C-u>call gpt_pynvim#GptPyNvim()<CR>
 
-" GptPyNvimコマンドを作成し、引数を１つ受け取るようにする
+" Sample
 " command! -nargs=1 GptPyNvim :call gpt_pynvim#GptPyNvim(<f-args>)

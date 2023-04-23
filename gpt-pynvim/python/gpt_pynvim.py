@@ -1,36 +1,32 @@
 import os
-import vim
+try:
+    import vim
+except ImportError:
+    from tests.mock_vim import vim
 import openai
 
 WINDOW_NAME="GptPyNvim"
 
-# OPENAIのAPIキーを環境変数から取得し設定
 if 'OPENAI_API_KEY' in os.environ:
     openai.api_key = os.environ['OPENAI_API_KEY']
 else:
-    print('環境変数OPENAI_API_KEYが設定されていません。')
+    print("Error: OPENAI_API_KEY is not set.")
 
 
 def open_new_window():
-    # 既存のウインドウを探し、あればそこに移動する
     for window in vim.windows:
         if os.path.basename(window.buffer.name) == WINDOW_NAME:
             vim.current.window = window
             break
 
     else:
-        # 新しくバッファを作成する
         vim.command(f"new {WINDOW_NAME}")
         vim.command("normal! ggVGd") 
-
-        # {BUFFER_NAME}のバッファを読み取り専用にする
         vim.command("setlocal buftype=nofile")
 
 
 def main():
     try:
-
-        # 矩形選択された行を取得
         start_row, start_col = vim.eval("getpos(\"'<\")[1:2]")
         end_row, end_col = vim.eval("getpos(\"'>\")[1:2]")
         contents = []
@@ -40,7 +36,6 @@ def main():
     
         selected_text = "\\n".join(contents).strip()
     
-        # GPT-3による解説コメントの生成
         if selected_text.startswith("#"):
             prompt = f"Based on the following description, write a Python code snippet that implements the described functionality: \n{selected_text}"
     
@@ -55,10 +50,8 @@ def main():
                                             n=1, stop=None,
                                             temperature=0.5)
     
-        # コメントを取得
         text = response.choices[0].text.strip()
     
-        # 新規にウインドウを開く
         open_new_window()
         vim.current.buffer[:] = text.splitlines()
     
